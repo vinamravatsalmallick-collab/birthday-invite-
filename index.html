@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Birthday Invitation</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins&family=Baloo+2&display=swap" rel="stylesheet">
+
+<style>
+body{margin:0;font-family:'Poppins';overflow:hidden;}
+
+/* PAGE SYSTEM */
+.page{
+position:absolute;
+width:100%;
+height:100%;
+display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+text-align:center;
+}
+.active{display:flex;}
+
+/* BUTTON */
+.btn{
+padding:12px 25px;
+border:none;
+border-radius:30px;
+background:#ff6f91;
+color:white;
+cursor:pointer;
+animation:btnPulse 1.5s infinite;
+}
+@keyframes btnPulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.1);}
+100%{transform:scale(1);}
+}
+
+/* GLOW */
+.glow{
+color:#ff4d6d;
+text-shadow:0 0 10px pink,0 0 20px hotpink;
+}
+
+/* PARTICLES */
+.particle{
+position:absolute;
+width:6px;
+height:6px;
+background:white;
+border-radius:50%;
+animation:floatUp 6s linear infinite;
+}
+@keyframes floatUp{
+from{transform:translateY(100vh);opacity:1;}
+to{transform:translateY(-10vh);opacity:0;}
+}
+
+/* FADE */
+#fade{
+position:absolute;
+top:0;left:0;width:100%;height:100%;
+background:black;
+opacity:0;
+transition:1s;
+z-index:5;
+pointer-events:none;
+}
+
+/* PAGE 2 */
+.page2{
+background:linear-gradient(135deg,#ffdde1,#ee9ca7);
+overflow:hidden;
+}
+#slide{width:200px;height:200px;border-radius:15px;}
+
+.box{
+padding:12px;margin:8px;border-radius:15px;
+width:85%;max-width:320px;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* effects */
+.balloon{position:absolute;bottom:-50px;animation:rise 6s linear infinite;}
+@keyframes rise{to{transform:translateY(-110vh);}}
+
+.confetti{position:absolute;top:-20px;animation:fall 5s linear infinite;}
+@keyframes fall{to{transform:translateY(110vh);}}
+
+/* page3 */
+.page3{background:linear-gradient(135deg,#caffbf,#9bf6ff);}
+
+/* hearts */
+.heart{position:absolute;bottom:-20px;animation:float 6s linear infinite;}
+@keyframes float{to{transform:translateY(-110vh);}}
+
+/* card */
+#card{
+display:none;
+position:absolute;
+top:0;left:0;width:100%;height:100%;
+background:#0008;
+justify-content:center;
+align-items:center;
+}
+#card img{width:90%;max-width:350px;}
+</style>
+</head>
+
+<body>
+
+<div id="fade"></div>
+
+<!-- PAGE 0 ENTRY -->
+<div class="page active" id="page0" style="background:linear-gradient(135deg,#ffdde1,#ee9ca7);">
+
+<h1 class="glow" style="font-family:'Pacifico';font-size:32px;">
+Welcome 💖
+</h1>
+
+<button class="btn" onclick="startExperience()">Tap to Enter ✨</button>
+
+</div>
+
+<!-- PAGE 1 VIDEO -->
+<div class="page">
+<video id="video" playsinline style="width:100%;height:100%;object-fit:cover;">
+<source src="ganesh.mp4">
+</video>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page page2" id="page2">
+
+<h1 class="glow" style="font-family:'Baloo 2';font-size:32px;">
+✨ Samagra 1st Birthday Celebration 🎂
+</h1>
+
+<div style="position:relative;">
+<span style="position:absolute;top:-20px;left:45%;font-size:30px;">🎉</span>
+<img id="slide" src="img1.jpg">
+</div>
+
+<div class="box" style="background:#ffe5ec;">Date: 24 April 2026</div>
+<div class="box" style="background:#e0bbff;">Time: 5 PM onwards</div>
+<div class="box" style="background:#caffbf;">
+Address: Jai Chaudhary C/O Aashish Kumar, Kolanta Patori near paani tanki, Darbhanga
+</div>
+
+<button class="btn" onclick="nextPage()">Next ➡</button>
+
+<audio id="music" src="birthdaysong.mp3" loop></audio>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page page3" id="page3">
+
+<h2 class="glow">💖 Special Invitation 💖</h2>
+
+<div class="box" style="background:#ffd6e0;"><p id="s1"></p></div>
+<div class="box" style="background:#e7c6ff;"><p id="s2"></p></div>
+<div class="box" style="background:#caffbf;"><p id="s3"></p></div>
+
+<button class="btn" onclick="showCard()">Tap to View Invitation Card</button>
+
+</div>
+
+<!-- CARD -->
+<div id="card"><img src="card.jpg"></div>
+
+<script>
+let pages=document.querySelectorAll(".page");
+let current=0;
+
+/* PARTICLES */
+for(let i=0;i<30;i++){
+let p=document.createElement("div");
+p.className="particle";
+p.style.left=Math.random()*100+"vw";
+p.style.animationDuration=(4+Math.random()*3)+"s";
+document.getElementById("page0").appendChild(p);
+}
+
+/* START */
+function startExperience(){
+pages[current].classList.remove("active");
+current=1;
+pages[current].classList.add("active");
+
+let video=document.getElementById("video");
+video.muted=false;
+video.play();
+}
+
+/* VIDEO END */
+document.getElementById("video").onended=function(){
+fadeOut(()=>{
+nextPage();
+startMusic();
+});
+};
+
+/* FADE */
+function fadeOut(callback){
+let f=document.getElementById("fade");
+f.style.opacity=1;
+setTimeout(()=>{
+callback();
+f.style.opacity=0;
+},1000);
+}
+
+/* NAV */
+function nextPage(){
+pages[current].classList.remove("active");
+current++;
+pages[current].classList.add("active");
+
+if(current==2){
+startSlide();
+startEffects();
+}
+if(current==3){
+startTyping();
+startHearts();
+}
+}
+
+/* MUSIC */
+function startMusic(){
+let m=document.getElementById("music");
+m.volume=0;
+m.play();
+
+let vol=0;
+let fade=setInterval(()=>{
+if(vol<1){
+vol+=0.05;
+m.volume=vol;
+}else{
+clearInterval(fade);
+}
+},200);
+}
+
+/* SLIDESHOW */
+let imgs=["img1.jpg","img2.jpg","img3.jpg","img4.jpg","img5.jpg","img6.jpg","img7.jpg","img8.jpg","img9.jpg","img10.jpg"];
+let i=0;
+function startSlide(){
+setInterval(()=>{
+i=(i+1)%imgs.length;
+document.getElementById("slide").src=imgs[i];
+},1500);
+}
+
+/* EFFECTS */
+function startEffects(){
+let p=document.getElementById("page2");
+for(let i=0;i<25;i++){
+let b=document.createElement("div");
+b.className="balloon";
+b.style.left=Math.random()*100+"vw";
+b.innerHTML="🎈";
+p.appendChild(b);
+
+let c=document.createElement("div");
+c.className="confetti";
+c.style.left=Math.random()*100+"vw";
+c.innerHTML="🎊";
+p.appendChild(c);
+}
+}
+
+/* TYPING */
+function startTyping(){
+type("s1","Nanhe kadmon se aayi hai khushiyon ki bahaar,\nHar dil me chhayi hai pyaar ki fuhar,\nAapke bina adhura hai ye utsav hamara,\nAaiye milkar manaye yeh janamdin pyara.",40);
+
+setTimeout(()=>type("s2","Na koi shikayat hogi na koi shikwa hoga,\nMeri khushiyon ke khatir aap sabhi ko aana hi hoga.",40),3000);
+
+setTimeout(()=>type("s3","Hamari nanhi si duniya ko aashirwaad dene ke liye jaroor padhare.\nHame aapka janamdin ke din intezaar rahega ❤️",40),6000);
+}
+
+function type(id,text,speed){
+let el=document.getElementById(id);
+let i=0;
+function run(){
+if(i<text.length){
+el.innerHTML+=text[i];
+i++;
+setTimeout(run,speed);
+}
+}
+run();
+}
+
+/* HEARTS */
+function startHearts(){
+let p=document.getElementById("page3");
+for(let i=0;i<20;i++){
+let h=document.createElement("div");
+h.className="heart";
+h.style.left=Math.random()*100+"vw";
+h.innerHTML="💖";
+p.appendChild(h);
+}
+}
+
+/* CARD */
+function showCard(){
+document.getElementById("card").style.display="flex";
+}
+</script>
+
+</body>
+</html>
